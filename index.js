@@ -1,3 +1,5 @@
+// ugly code incoming... :D
+
 const radius = 20;
 const maxV = 100;
 
@@ -140,22 +142,14 @@ function isomorphic(graph1, graph2) {
     const n1 = graph1.nodes.length;
     const n2 = graph2.nodes.length;
     if (n1 !== n2) {
-
         setResult('\\(\\text{Not isomorphic because the numbers of vertices are different}\\)');
         return false;
     }
-
     const n = n1;
-
     const A1 = Array.from(Array(n * n), (_, idx) => graph1.adj[maxV * Math.floor(idx / n) + idx % n]);
-    
-    
     const A2 = Array.from(Array(n * n), (_, idx) => graph2.adj[maxV * Math.floor(idx / n) + idx % n]);
-    
-    
 
     let found = false;
-
     for (let map of permute(n)) {
         let ok = true;
         for (let i = 0; i < n && ok; ++i) {
@@ -165,7 +159,6 @@ function isomorphic(graph1, graph2) {
                 }
             }
         }
-    
         if (ok) { 
             found = true;
             let outResult = `\\(\\text{The graphs are isomorphic, one valid mapping is}\\) 
@@ -174,23 +167,15 @@ function isomorphic(graph1, graph2) {
             for (let i = 0; i < n; ++i) {
               outResult += `u_${i + 1} \\\\ `;
             }
-
             outResult += `\\end{bmatrix}\\right) = \\begin{bmatrix} `;
-
-
             for (let i = 0; i < n; ++i) {
                 outResult += `v_${map[i] + 1} \\\\ `;
             }
-
             outResult += `\\end{bmatrix}\\]`;
-
             setResult(outResult);
-
             break;
         }
     }
-
-    
 
     if (!found) {
       const char1 = characteristic(A1, n);
@@ -208,7 +193,7 @@ function isomorphic(graph1, graph2) {
         \\end{cases}
       \\]`);
     }
-
+    
     return found;
 }
 
