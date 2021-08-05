@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <script src="./index.js" defer></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    
+    <div class="container pt-3">
+      <div class="text-center">
+        <h1>Graph isomorphism checking tool</h1>
+      </div>
+      Welcome to the <b>Graph isomorphism checking tool</b>, the tool we created based on the result of our homework about graphs
+      <ul>
+        <li> The left box and the right box are the canvas for graph 1 and graph 2, respectively.</li>
+        <li> You can create vertices by left click and drag.</li>
+        <li> You can create edges by right click and drag from one node to another.</li>
+        <li> After finish sketching the graph, you can click the "Check isomorphism" button to see the result and the explaination.</li>
+        <li> There currently no "reset" button so if you want to check another graphs, you need to refresh the page.</li>
+      </ul>
+      <div class="text-center">
+        <canvas id="graph1" width=400 height=400 style="border:1px solid #000000;"></canvas>
+        <canvas id="graph2" width=400 height=400 style="border:1px solid #000000;"></canvas>
+        <br>
+        <button class="btn btn-secondary" onclick="isomorphic(graph1, graph2)">Check isomorphism</button>
+        <div class="pt-2">
+          <p></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
