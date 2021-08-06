@@ -165,11 +165,11 @@ function isomorphic(graph1, graph2) {
             \\[
               f\\left(\\begin{bmatrix} `;
             for (let i = 0; i < n; ++i) {
-              outResult += `u_${i + 1} \\\\ `;
+              outResult += `u_{${i + 1}} \\\\ `;
             }
             outResult += `\\end{bmatrix}\\right) = \\begin{bmatrix} `;
             for (let i = 0; i < n; ++i) {
-                outResult += `v_${map[i] + 1} \\\\ `;
+                outResult += `v_{${map[i] + 1}} \\\\ `;
             }
             outResult += `\\end{bmatrix}\\]`;
             setResult(outResult);
