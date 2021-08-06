@@ -1,4 +1,4 @@
-  window.onbeforeunload = function () {
+window.onbeforeunload = function () {
     window.scrollTo(0, 0);
   }
 
@@ -1294,5 +1294,4 @@ Graph._node = function(contextid, x=false, y=false, r=false, text=""){
 }
 
 Graph.functions = {}
-
 
