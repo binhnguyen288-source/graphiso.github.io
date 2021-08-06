@@ -1,1 +1,1 @@
-em++ -O3 -std=c++20 -s TOTAL_MEMORY=512MB -s EXPORTED_FUNCTIONS=_checkIsomorphism,_characteristic -s EXPORTED_RUNTIME_METHODS=ccall graph.cpp -o graphcpp.js
+em++ -msimd128 -O3 -std=c++20 -s TOTAL_MEMORY=512MB -s EXPORTED_FUNCTIONS=_checkIsomorphism,_characteristic -s EXPORTED_RUNTIME_METHODS=ccall graph.cpp -o graphcpp.js

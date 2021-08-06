@@ -42,6 +42,7 @@ Module['onRuntimeInitialized'] = () => {
         let coff = `${sign}`;
 
         if (C[i] !== 1 && C[i] !== -1) coff += `${C[i]}`;
+        if (C[i] === -1) coff = '-';
 
         if (i > 1) outstr += `${coff}${x}^{${i}}`;
         else if (i === 1) outstr += `${coff}${x}`;
