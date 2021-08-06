@@ -78,11 +78,8 @@ Module['onRuntimeInitialized'] = () => {
       const A2 = Array.from(Array(n * n), (_, idx) => graph2.adj[maxV * Math.floor(idx / n) + idx % n]);
 
       const arg = `${n} ${A1.join(' ')} ${A2.join(' ')}`;
-      console.log(arg);
 
       const result_from_cpp = Module.ccall('checkIsomorphism', 'string', ['string'], [arg]);
-
-      console.log(result_from_cpp);
       if (result_from_cpp)
       {
         let map = JSON.parse(result_from_cpp);
@@ -103,7 +100,6 @@ Module['onRuntimeInitialized'] = () => {
         const char1 = JSON.parse(Module.ccall('characteristic', 'string', ['string'], [`${n} ${A1.join(' ')}`]));
         const char2 = JSON.parse(Module.ccall('characteristic', 'string', ['string'], [`${n} ${A2.join(' ')}`]));
 
-        console.log(char1);
 
         setResult(`\\(
           \\text{Not isomorphic because the charateristic equations are different}
