@@ -12,111 +12,83 @@ using Val = float;
 
 char buf[1 << 20];
 
-struct Poly {
-    vector<Val> coff;
-    Poly(size_t n) : coff(vector<Val>(n)) {}
-    Poly(size_t n, std::initializer_list<Val> list) {
-        coff = vector<Val>(n);
-        size_t i = 0;
-        for (auto v : list) {
-            coff[i++] = v;
-        }
+struct Mat {
+    vector<Val> data;
+    size_t rows, cols;
+
+    Mat(size_t m, size_t n) : rows(m), cols(n) {
+        data = vector<Val>(m * n);
     }
 
-     Poly operator*(const Poly& other) const {
-        size_t n = coff.size();
-        Poly result(n);
-        for (size_t i = 0; i < n; ++i) {
-            for (size_t j = 0; j <= i; ++j) {
-                result.coff[i] += other.coff[j] * coff[i - j];
+    Mat(size_t n) : rows(n), cols(n) {
+        data = vector<Val>(n * n);
+    }
+    
+    Val& operator()(size_t i, size_t j) {
+        return data[i * cols + j];
+    }
+    Val operator()(size_t i, size_t j) const {
+        return data[i * cols + j];
+    }
+
+    // Val& operator[](size_t i) {
+    //     return data[i];
+    // }
+    
+    Mat mul(const Mat& other) const {
+        const size_t m = rows;
+        const size_t n = cols;
+        const size_t p = other.cols;
+        Mat result(m, p);
+        for (size_t i = 0; i < m; ++i) {
+            for (size_t k = 0; k < n; ++k) {
+                for (size_t j = 0; j < p; ++j) {
+                    result(i, j) += (*this)(i, k) * other(k, j);
+                }
             }
         }
         return result;
     }
-
-    Poly operator/(Val v) const {
-        size_t n = coff.size();
-        Poly result(n);
-        for (size_t i = 0; i < n; ++i) {
-            result.coff[i] = coff[i] / v;
+    Mat diagAdd(const Val x) const {
+        Mat result = *this;
+        for (size_t i = 0; i < cols; ++i)
+            result(i, i) += x;
+        return result;
+    }
+    Val trace() const {
+        Val result = 0;
+        for (size_t i = 0; i < cols; ++i) {
+            result += (*this)(i, i);
         }
         return result;
     }
-
-    Poly operator*(Val v) const {
-        size_t n = coff.size();
-        Poly result(n);
-        for (size_t i = 0; i < n; ++i) {
-            result.coff[i] = coff[i] * v;
-        }
-        return result;
-    }
-
-    Poly operator+(const Poly& other) const {
-        size_t n = coff.size();
-        Poly result(n);
-        for (size_t i = 0; i < n; ++i) {
-            result.coff[i] = coff[i] + other.coff[i];
-        }
-        return result;
-    }
-
-     Poly operator-(const Poly& other) const {
-        size_t n = coff.size();
-        Poly result(n);
-        for (size_t i = 0; i < n; ++i) {
-            result.coff[i] = coff[i] - other.coff[i];
-        }
-        return result;
-    }
-
-
 };
 
-Val perm_sign(const vector<size_t>& perm) {
-
-    Val sign = 1;
-
-    for (size_t i = 0; i < perm.size(); ++i) {
-        for (size_t j = 0; j < i; ++j) {
-            if (perm[j] > perm[i]) sign *= -1;
-        }
-    }
-
-    return sign;
-}
-
 extern "C" const char* characteristic(const char* graph) {
+
     stringstream stream(graph);
     size_t n;
     stream >> n;
-    vector<Poly> mat(n * n, Poly(n + 1));
-    for (size_t i = 0; i < n * n; ++i) {
-        stream >> mat[i].coff[0];
+    Mat A(n);
+    for (Val& v : A.data) {
+        stream >> v;
     }
-
-    for (size_t i = 0; i < n; ++i) {
-        mat[i * n + i].coff[1] -= 1;
-    }
-
-    vector<size_t> perm(n);
-    std::generate(perm.begin(), perm.end(), [x = 0]() mutable { return x++; });
-
-    Poly det(n + 1);
-
-    do {
-        Poly prod(n + 1, {perm_sign(perm)});
-        for (size_t i = 0; i < n; ++i) {
-            prod = prod * mat[i * n + perm[i]];
+    vector<Val> coff(n + 1);
+    coff[n] = 1;
+    Mat C = A;
+    
+    for (size_t k = 1; k <= n; ++k) {
+        if (k > 1) {
+            C = A.mul(C.diagAdd(coff[n - k + 1]));
         }
-        det = det + prod;
-    } while (std::next_permutation(perm.begin(), perm.end()));
+        coff[n - k] = -C.trace() / k;
+    }
 
     memset(buf, 0, sizeof(buf));
     stringstream outstream;
     outstream << "[";
-    for (size_t i = 0; i < det.coff.size(); ++i) {
-        outstream << det.coff[i];
+    for (size_t i = 0; i <= n; ++i) {
+        outstream << coff[i];
         if (i < n) outstream << ',';
     }
     outstream << "]";
