@@ -103,7 +103,7 @@ Module['onRuntimeInitialized'] = () => {
 
 
         setResult(`\\(
-          \\text{Not isomorphic because the charateristic equations are different}
+          \\text{Not isomorphic because the characteristic polynomials are different}
           \\)
           \\[
           \\begin{cases}
